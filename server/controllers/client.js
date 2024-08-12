@@ -2,31 +2,35 @@ import Client from "../models/client.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// Function to get all clients
+const generateToken = (obj) => {
+  return jwt.sign(obj, process.env.JWTSECRET_KEY, { expiresIn: "7d" });
+};
+
+const sendErrorResponse = (res, statusCode, message) => {
+  return res.status(statusCode).json({ message });
+};
+
 export const GetAllClients = async (_, res) => {
   try {
     const clients = await Client.find();
     return res.json(clients);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Xatolik!",
-    });
+    return sendErrorResponse(res, 500, "Internal server error.");
   }
 };
 
-// Function to create a new client
-export const CreateNewClient = async (req, res) => {
+export const ClientRegister = async (req, res) => {
   const { phoneNumber, fullName, avatar, password } = req.body;
 
   try {
-    const client = await Client.findOne({ phoneNumber });
+    const existingClient = await Client.findOne({ phoneNumber });
 
-    if (client) {
-      return res.status(409).json({
-        message:
-          "Bunday raqamli foydalanuvchi mavjud, iltimos boshqa raqamdan foydalanib ko'ring!",
-      });
+    if (existingClient) {
+      return sendErrorResponse(
+        res,
+        409,
+        "User with this phone number already exists. Please use another number."
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,19 +44,46 @@ export const CreateNewClient = async (req, res) => {
 
     await newClient.save();
 
-    const token = jwt.sign({ _id: newClient._id }, process.env.JWTSECRET_KEY, {
-      expiresIn: "7d",
-    });
+    const token = generateToken({ _id: newClient._id, role: "client" });
 
     return res.status(201).json({
-      message: "Yangi foydalanuvchi muvaffaqiyatli yaratildi!",
+      message: "New user successfully created!",
       client: newClient,
       token,
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Xatolik!",
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
+
+export const ClientLogin = async (req, res) => {
+  const { phoneNumber, password } = req.body;
+
+  try {
+    const client = await Client.findOne({ phoneNumber });
+
+    if (!client) {
+      return sendErrorResponse(
+        res,
+        401,
+        "User with this phone number does not exist."
+      );
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, client.password);
+
+    if (!isPasswordValid) {
+      return sendErrorResponse(res, 401, "Incorrect phone number or password.");
+    }
+
+    const token = generateToken({ _id: client._id, role: "client" });
+
+    return res.status(200).json({
+      message: "Success!",
+      client,
+      token,
     });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
   }
 };

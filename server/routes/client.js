@@ -1,9 +1,14 @@
 import express from "express";
-import { CreateNewClient, GetAllClients } from "../controllers/client.js";
+import {
+  ClientLogin,
+  ClientRegister,
+  GetAllClients,
+} from "../controllers/client.js";
 
 const router = express.Router();
 
 router.get("/", GetAllClients);
-router.post("/create", CreateNewClient);
+router.post("/register", ClientRegister);
+router.post("/login", ClientLogin);
 
 export default router;
