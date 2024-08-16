@@ -43,6 +43,38 @@ export const CreateNewAdmin = async (req, res) => {
   }
 };
 
+export const AdminLogin = async (req, res) => {
+  const { phoneNumber, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ phoneNumber });
+
+    if (!admin) {
+      return sendErrorResponse(
+        res,
+        401,
+        "Admin with this phone number does not exist."
+      );
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+
+    if (!isPasswordValid) {
+      return sendErrorResponse(res, 401, "Incorrect phone number or password.");
+    }
+
+    const token = generateToken({ _id: admin._id, role: "admin" });
+
+    return res.status(200).json({
+      message: "Success!",
+      data: admin,
+      token,
+    });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
+
 export const GetAllClients = async (_, res) => {
   try {
     const clients = await Client.find();
