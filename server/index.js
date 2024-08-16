@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import multer from "multer";
 
 import ClientRoutes from "./routes/client.js";
+import AdminRoutes from "./routes/admin.js";
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.post("/upload", upload.single("image"), (req, res) => {
 });
 
 app.get("/", (_, res) => res.send("Hello world!"));
+
+app.use("/admin", AdminRoutes);
 app.use("/client", ClientRoutes);
 
 const startApp = async () => {

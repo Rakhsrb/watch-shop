@@ -1,26 +1,14 @@
 import Client from "../models/client.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-
-const generateToken = (obj) => {
-  return jwt.sign(obj, process.env.JWTSECRET_KEY, { expiresIn: "7d" });
-};
+import generateAvatar from "../middlewares/generateAvatar.js";
+import generateToken from "../middlewares/generateToken.js";
 
 const sendErrorResponse = (res, statusCode, message) => {
   return res.status(statusCode).json({ message });
 };
 
-export const GetAllClients = async (_, res) => {
-  try {
-    const clients = await Client.find();
-    return res.json(clients);
-  } catch (error) {
-    return sendErrorResponse(res, 500, "Internal server error.");
-  }
-};
-
 export const ClientRegister = async (req, res) => {
-  const { phoneNumber, fullName, avatar, password } = req.body;
+  const { phoneNumber, firstName, lastName, avatar, password } = req.body;
 
   try {
     const existingClient = await Client.findOne({ phoneNumber });
@@ -34,11 +22,12 @@ export const ClientRegister = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    const avatarPhoto = avatar ? avatar : generateAvatar(firstName, lastName);
     const newClient = new Client({
       phoneNumber,
-      fullName,
-      avatar,
+      firstName,
+      lastName,
+      avatar: avatarPhoto,
       password: hashedPassword,
     });
 
@@ -48,7 +37,7 @@ export const ClientRegister = async (req, res) => {
 
     return res.status(201).json({
       message: "New user successfully created!",
-      client: newClient,
+      data: newClient,
       token,
     });
   } catch (error) {
