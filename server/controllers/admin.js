@@ -1,11 +1,32 @@
 import generateAvatar from "../middlewares/generateAvatar.js";
 import generateToken from "../middlewares/generateToken.js";
 import Admin from "../models/admin.js";
-import Client from "../models/client.js";
 import bcrypt from "bcrypt";
 
 const sendErrorResponse = (res, statusCode, message) => {
   return res.status(statusCode).json({ message });
+};
+
+export const GetAllAdmins = async (_, res) => {
+  try {
+    const admins = await Admin.find();
+    return res.json({ data: admins });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
+
+export const GetOneAdmin = async (req, res) => {
+  const adminId = req.params.id;
+  try {
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return sendErrorResponse(res, 409, "Admin not found.");
+    }
+    return res.status(201).json({ data: admin });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
 };
 
 export const CreateNewAdmin = async (req, res) => {
@@ -43,6 +64,31 @@ export const CreateNewAdmin = async (req, res) => {
   }
 };
 
+export const UpdateAdmin = async (req, res) => {
+  const userId = req.params.id;
+  const { phoneNumber, firstName, lastName, avatar, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const avatarPhoto = avatar ? avatar : generateAvatar(firstName, lastName);
+    const updatedAdmin = {
+      phoneNumber,
+      lastName,
+      firstName,
+      avatar: avatarPhoto,
+      password: hashedPassword,
+    };
+    const admin = await Admin.findByIdAndUpdate(userId, updatedAdmin, {
+      new: true,
+    });
+    if (!admin) {
+      return sendErrorResponse(res, 409, "Admin not found.");
+    }
+    return res.status(201).json({ data: admin });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
+
 export const AdminLogin = async (req, res) => {
   const { phoneNumber, password } = req.body;
 
@@ -70,15 +116,6 @@ export const AdminLogin = async (req, res) => {
       data: admin,
       token,
     });
-  } catch (error) {
-    return sendErrorResponse(res, 500, "Internal server error.");
-  }
-};
-
-export const GetAllClients = async (_, res) => {
-  try {
-    const clients = await Client.find();
-    return res.json(clients);
   } catch (error) {
     return sendErrorResponse(res, 500, "Internal server error.");
   }

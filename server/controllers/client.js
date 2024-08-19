@@ -76,3 +76,12 @@ export const ClientLogin = async (req, res) => {
     return sendErrorResponse(res, 500, "Internal server error.");
   }
 };
+
+export const GetAllClients = async (_, res) => {
+  try {
+    const clients = await Client.find();
+    return res.json(clients);
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
