@@ -85,3 +85,44 @@ export const GetAllClients = async (_, res) => {
     return sendErrorResponse(res, 500, "Internal server error.");
   }
 };
+
+export const UpdateClient = async (req, res) => {
+  const userId = req.params.id;
+  const { phoneNumber, firstName, lastName, avatar, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const avatarPhoto = avatar ? avatar : generateAvatar(firstName, lastName);
+    const updatedClient = {
+      phoneNumber,
+      lastName,
+      firstName,
+      avatar: avatarPhoto,
+      password: hashedPassword,
+    };
+    const client = await Client.findByIdAndUpdate(userId, updatedClient, {
+      new: true,
+    });
+    if (!client) {
+      return sendErrorResponse(res, 409, "Client not found.");
+    }
+    return res.status(201).json({ data: client });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
+
+export const DeleteClient = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedClient = await Client.findByIdAndDelete(id);
+    if (!deletedClient) {
+      return sendErrorResponse(res, 404, "Client not found.");
+    }
+    return res
+      .status(201)
+      .json({ message: "Client has been deleted successfully." });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};

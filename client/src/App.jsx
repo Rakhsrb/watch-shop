@@ -1,10 +1,10 @@
 import React from "react";
-import Bg_image from "./assets/bg-light.png";
+import { Home } from "./pages/Home";
 
 function App() {
   return (
     <div>
-      <img src={Bg_image} alt="" />
+      <Home />
     </div>
   );
 }

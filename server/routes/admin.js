@@ -1,6 +1,7 @@
 import express from "express";
 import {
   CreateNewAdmin,
+  DeleteAdmin,
   GetAllAdmins,
   GetOneAdmin,
   UpdateAdmin,
@@ -10,7 +11,8 @@ const router = express.Router();
 
 router.get("/", GetAllAdmins);
 router.get("/:id", GetOneAdmin);
-router.post("/register", CreateNewAdmin);
+router.post("/create", CreateNewAdmin);
 router.put("/:id", UpdateAdmin);
+router.delete("/:id", DeleteAdmin);
 
 export default router;

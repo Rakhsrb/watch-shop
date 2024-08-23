@@ -120,3 +120,19 @@ export const AdminLogin = async (req, res) => {
     return sendErrorResponse(res, 500, "Internal server error.");
   }
 };
+
+export const DeleteAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedAdmin = await Admin.findByIdAndDelete(id);
+    if (!deletedAdmin) {
+      return sendErrorResponse(res, 404, "Admin not found.");
+    }
+    return res
+      .status(201)
+      .json({ message: "Admin has been deleted successfully." });
+  } catch (error) {
+    return sendErrorResponse(res, 500, "Internal server error.");
+  }
+};
