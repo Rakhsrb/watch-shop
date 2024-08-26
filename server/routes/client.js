@@ -6,13 +6,14 @@ import {
   GetAllClients,
   UpdateClient,
 } from "../controllers/client.js";
+import isExisted from "../middlewares/isExisted.js";
 
 const router = express.Router();
 
-router.get("/", GetAllClients);
+router.get("/", isExisted("admin"), GetAllClients);
 router.post("/register", ClientRegister);
 router.post("/login", ClientLogin);
-router.put("/:id", UpdateClient);
-router.delete("/:id", DeleteClient);
+router.put("/:id", isExisted("client"), UpdateClient);
+router.delete("/:id", isExisted("client"), DeleteClient);
 
 export default router;

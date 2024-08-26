@@ -7,6 +7,7 @@ import multer from "multer";
 import ClientRoutes from "./routes/client.js";
 import AdminRoutes from "./routes/admin.js";
 import ProductRoutes from "./routes/product.js";
+import isExisted from "./middlewares/isExisted.js";
 
 dotenv.config();
 

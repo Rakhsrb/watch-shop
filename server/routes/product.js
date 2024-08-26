@@ -1,9 +1,18 @@
 import exress from "express";
-import { CreateNewProduct, GetAllProducts } from "../controllers/product.js";
+import {
+  CreateNewProduct,
+  DeleteProduct,
+  GetAllProducts,
+  GetOneProduct,
+  UpdateProduct,
+} from "../controllers/product.js";
 
 const router = exress.Router();
 
 router.get("/", GetAllProducts);
-router.post("/create", CreateNewProduct);
+router.get("/:id", GetOneProduct);
+router.post("/create", isExisted("admin"), CreateNewProduct);
+router.delete("/:id", isExisted("admin"), DeleteProduct);
+router.put("/:id", isExisted("admin"), UpdateProduct);
 
 export default router;
