@@ -6,6 +6,7 @@ import {
   GetOneProduct,
   UpdateProduct,
 } from "../controllers/product.js";
+import isExisted from "../middlewares/isExisted.js";
 
 const router = exress.Router();
 

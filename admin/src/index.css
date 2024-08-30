@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.root-grid {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+aside ul li a.active {
+  background: #052e16;
+}
+
+@media screen and (max-width: 800px) {
+  .root-grid {
+    grid-template-columns: 1fr;
+  }
+}
