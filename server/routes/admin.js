@@ -8,14 +8,15 @@ import {
   UpdateAdmin,
 } from "../controllers/admin.js";
 import isExisted from "../middlewares/isExisted.js";
+import IsAdmin from "../middlewares/IsAdmin.js";
 
 const router = express.Router();
 
-router.get("/", isExisted("admin"), GetAllAdmins);
-router.get("/:id", isExisted("admin"), GetOneAdmin);
+router.get("/", isExisted, IsAdmin, GetAllAdmins);
+router.get("/:id", isExisted, IsAdmin, GetOneAdmin);
 router.post("/login", AdminLogin);
-router.post("/create", isExisted("admin"), CreateNewAdmin);
-router.put("/:id", isExisted("admin"), UpdateAdmin);
-router.delete("/:id", isExisted("admin"), DeleteAdmin);
+router.post("/create", isExisted, IsAdmin, CreateNewAdmin);
+router.put("/:id", isExisted, IsAdmin, UpdateAdmin);
+router.delete("/:id", isExisted, IsAdmin, DeleteAdmin);
 
 export default router;

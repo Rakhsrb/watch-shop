@@ -7,13 +7,14 @@ import {
   UpdateProduct,
 } from "../controllers/product.js";
 import isExisted from "../middlewares/isExisted.js";
+import IsAdmin from "../middlewares/IsAdmin.js";
 
 const router = exress.Router();
 
 router.get("/", GetAllProducts);
 router.get("/:id", GetOneProduct);
-router.post("/create", isExisted("admin"), CreateNewProduct);
-router.delete("/:id", isExisted("admin"), DeleteProduct);
-router.put("/:id", isExisted("admin"), UpdateProduct);
+router.post("/create", isExisted, IsAdmin, CreateNewProduct);
+router.delete("/:id", isExisted, IsAdmin, DeleteProduct);
+router.put("/:id", isExisted, IsAdmin, UpdateProduct);
 
 export default router;
