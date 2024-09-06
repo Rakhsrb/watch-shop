@@ -14,7 +14,7 @@ import IsAdmin from "../middlewares/IsAdmin.js";
 const router = express.Router();
 
 router.get("/", isExisted, IsAdmin, GetAllAdmins);
-router.get("/me", isExisted, IsAdmin, GetMe);
+router.get("/me", isExisted, GetMe);
 router.get("/:id", isExisted, IsAdmin, GetOneAdmin);
 router.post("/login", AdminLogin);
 router.post("/create", isExisted, IsAdmin, CreateNewAdmin);

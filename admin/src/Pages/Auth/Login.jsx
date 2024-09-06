@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Eye, EyeSlash } from "@phosphor-icons/react";
 import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Axios from "../../Axios";
 
 export const Login = () => {
@@ -12,11 +11,10 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const navigate = useNavigate();
   const { isAuth } = useSelector((state) => state.user);
 
   if (isAuth) {
-    navigate("/");
+    window.location.href = "/";
   }
 
   const handleLogin = async (e) => {
@@ -30,12 +28,10 @@ export const Login = () => {
         phoneNumber: +phone,
       });
 
-      console.log(data);
-
       Cookies.set("token", data.token, { secure: true, expires: 7 });
-      navigate("/");
+      window.location.href = "/";
     } catch (err) {
-      setError(err.response?.data?.message || "Произошла ошибка");
+      setError(err.response?.data || err.message);
     } finally {
       setIsLoading(false);
     }
