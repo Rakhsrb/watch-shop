@@ -136,3 +136,14 @@ export const DeleteAdmin = async (req, res) => {
     return sendErrorResponse(res, 500, "Internal server error.");
   }
 };
+
+export const GetMe = async (req, res) => {
+  try {
+    const foundAdmin = await Admin.findById(req.userInfo.userId);
+    if (!foundAdmin)
+      return res.status(404).json({ message: "Admin not found!" });
+    return res.status(200).json({ data: foundAdmin });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
