@@ -7,7 +7,7 @@ import multer from "multer";
 import ClientRoutes from "./routes/client.js";
 import AdminRoutes from "./routes/admin.js";
 import ProductRoutes from "./routes/product.js";
-import isExisted from "./middlewares/isExisted.js";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -29,9 +29,9 @@ const upload = multer({ storage });
 
 app.use("/uploads", express.static("uploads"));
 
-app.post("/upload", upload.single("image"), (req, res) => {
+app.post("/upload", upload.single("image"), async (req, res) => {
   res.json({
-    url: `http://localhost:${process.env.PORT}/uploads/${req.file.originalname}`,
+    url: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
   });
 });
 

@@ -67,25 +67,38 @@ export const CreateNewAdmin = async (req, res) => {
 export const UpdateAdmin = async (req, res) => {
   const userId = req.params.id;
   const { phoneNumber, firstName, lastName, avatar, password } = req.body;
+
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
     const avatarPhoto = avatar ? avatar : generateAvatar(firstName, lastName);
+
     const updatedAdmin = {
       phoneNumber,
       lastName,
       firstName,
       avatar: avatarPhoto,
-      password: hashedPassword,
     };
+
+    if (password) {
+      updatedAdmin.password = hashedPassword;
+    }
+
     const admin = await Admin.findByIdAndUpdate(userId, updatedAdmin, {
       new: true,
     });
+
     if (!admin) {
-      return sendErrorResponse(res, 409, "Admin not found.");
+      return res.status(409).json({ message: "Admin not found." });
     }
+
     return res.status(201).json({ data: admin });
   } catch (error) {
-    return sendErrorResponse(res, 500, "Internal server error.");
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 

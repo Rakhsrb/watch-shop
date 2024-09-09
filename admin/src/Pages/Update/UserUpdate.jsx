@@ -7,11 +7,13 @@ import { Section } from "../../Components/Section/Section";
 export const UserUpdate = () => {
   const { data } = useSelector((state) => state.user);
   const { id } = useParams();
-  const [formData, setFormData] = useState(data);
-
-  useEffect(() => {
-    setFormData((prevData) => ({ ...prevData, password: "" }));
-  }, [id]);
+  const [formData, setFormData] = useState({
+    firstName: data.firstName,
+    lastName: data.lastName,
+    avatar: data.avatar,
+    phoneNumber: data.phoneNumber,
+    newPassword: "",
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +21,32 @@ export const UserUpdate = () => {
   };
 
   const handleFileChange = async (e) => {
-    setFormData({ ...formData, avatar: e.target.files[0] });
-    const uploadData = new FormData();
-    uploadData.append("avatar", formData.avatar);
     try {
-      const { data } = await Axios.post("upload", uploadData);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      const formImageData = new FormData();
+      const selectedFile = e.target.files[0];
+      formImageData.append("image", selectedFile);
+
+      const { data } = await Axios.post("upload", formImageData);
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        avatar: data.url,
+      }));
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = Axios.put("admin/" + id, formData);
+      const { data } = await Axios.put(`admin/${id}`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        avatar: formData.avatar,
+        phoneNumber: formData.phoneNumber,
+        password: formData.newPassword,
+      });
       window.location.href = "/";
     } catch (error) {
       console.log(error);
@@ -76,9 +89,9 @@ export const UserUpdate = () => {
         <input
           className="p-2 outline-none border-2 border-black rounded-2xl"
           type="password"
-          placeholder="Password"
-          name="password"
-          value={formData.password}
+          placeholder="New password"
+          name="newPassword"
+          value={formData.newPassword}
           onChange={handleInputChange}
         />
         <input type="file" name="avatar" onChange={handleFileChange} />
