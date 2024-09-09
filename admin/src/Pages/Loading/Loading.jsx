@@ -6,7 +6,7 @@ export const Loading = () => {
     <>
       <section className="h-screen bg-green-800">
         <div className="container flex flex-col h-full items-center justify-center gap-3">
-          <ClockLoader color="#fff" />
+          <ClockLoader color="#ffffff" size={50} />
         </div>
       </section>
     </>

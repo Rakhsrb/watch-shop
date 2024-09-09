@@ -13,6 +13,7 @@ import { Dashboard } from "./Pages/Dashboard/Dashboard";
 import { RootLayout } from "./Layout/RootLayout";
 import { AuthLayout } from "./Layout/AuthLayout";
 import { Error } from "./Pages/Error/Error";
+import { UserUpdate } from "./Pages/Update/UserUpdate";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,6 +56,10 @@ function App() {
             {
               index: true,
               element: <Dashboard />,
+            },
+            {
+              path: "/edit-admin/:id",
+              element: <UserUpdate />,
             },
             {
               path: "*",
