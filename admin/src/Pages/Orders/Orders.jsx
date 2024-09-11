@@ -1,55 +1,36 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { Section } from "../../Components/Section/Section";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Axios from "../../Axios";
 import {
-  getAdminsError,
-  getAdminsPending,
-  getAdminsSuccess,
-} from "../../Toolkit/AdminsSlicer";
+  getOrdersError,
+  getOrdersPending,
+  getOrdersSuccess,
+} from "../../Toolkit/OrdersSlicer";
 import { Trash2 } from "lucide-react";
 
-export const Admins = () => {
+export const Orders = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { data, isPending, isError } = useSelector((state) => state.admins);
+  const { data, isPending, isError } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    const getAllAdmins = async () => {
-      dispatch(getAdminsPending());
+    const getAllOrders = async () => {
+      dispatch(getOrdersPending());
       try {
-        const response = await Axios.get("admin");
-        dispatch(getAdminsSuccess(response.data?.data || []));
+        const { data } = await Axios.get("order").data;
+        dispatch(getOrdersSuccess(data));
       } catch (error) {
-        dispatch(
-          getAdminsError(error.response?.data?.message || "Unknown error")
-        );
+        dispatch(getOrdersError(error.response?.data?.message));
       }
     };
-    getAllAdmins();
+    getAllOrders();
   }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this admin?")) return;
-    try {
-      await Axios.delete(`admin/${id}`);
-      dispatch(getAdminsSuccess(data.filter((admin) => admin._id !== id)));
-      alert("Admin deleted successfully");
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to delete admin");
-    }
-  };
+  console.log(data);
 
   return (
-    <div className="p-8 bg-green-100 max-h-screen overflow-y-auto">
+    <Section>
       <div className="w-full flex justify-between items-center p-4">
-        <h1 className="text-3xl text-black">Admins</h1>
-        <button
-          onClick={() => navigate("/create-admin")}
-          className="bg-green-700 text-white px-4 py-2 rounded shadow hover:bg-green-800 transition-colors"
-        >
-          Create Admin
-        </button>
+        <h1 className="text-3xl text-black">Orders</h1>
       </div>
 
       {isPending ? (
@@ -107,10 +88,7 @@ export const Admins = () => {
               >
                 <td className="py-1 px-6 border-b border-green-800">
                   <img
-                    src={
-                      admin.avatar ||
-                      "https://st3.depositphotos.com/5852012/15878/v/450/depositphotos_158781058-stock-illustration-photo-gallery-flat-icon-with.jpg"
-                    }
+                    src={admin.avatar}
                     alt="Avatar"
                     className="w-10 h-10 mt-1 rounded-full object-cover"
                   />
@@ -138,9 +116,9 @@ export const Admins = () => {
         </table>
       ) : (
         <p className="text-gray-600 text-center text-lg mt-4">
-          No admins found.
+          No orders found.
         </p>
       )}
-    </div>
+    </Section>
   );
 };

@@ -7,7 +7,7 @@ import multer from "multer";
 import ClientRoutes from "./routes/client.js";
 import AdminRoutes from "./routes/admin.js";
 import ProductRoutes from "./routes/product.js";
-import bcrypt from "bcrypt";
+import OrderRoutes from "./routes/order.js";
 
 dotenv.config();
 
@@ -40,6 +40,7 @@ app.get("/", (_, res) => res.send("Hello world!"));
 app.use("/admin", AdminRoutes);
 app.use("/client", ClientRoutes);
 app.use("/product", ProductRoutes);
+app.use("/order", OrderRoutes);
 
 const startApp = async () => {
   try {

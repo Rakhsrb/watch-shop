@@ -31,7 +31,7 @@ export const Login = () => {
       Cookies.set("token", data.token, { secure: true, expires: 7 });
       window.location.href = "/";
     } catch (err) {
-      setError(err.response?.data || err.message);
+      setError(err.response?.data.message);
     } finally {
       setIsLoading(false);
     }

@@ -66,7 +66,7 @@ export const CreateNewAdmin = async (req, res) => {
 
 export const UpdateAdmin = async (req, res) => {
   const userId = req.params.id;
-  const { phoneNumber, firstName, lastName, avatar, password } = req.body;
+  const { phoneNumber, firstName, lastName, password } = req.body;
 
   try {
     let hashedPassword;
@@ -75,13 +75,11 @@ export const UpdateAdmin = async (req, res) => {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    const avatarPhoto = avatar ? avatar : generateAvatar(firstName, lastName);
-
     const updatedAdmin = {
       phoneNumber,
       lastName,
       firstName,
-      avatar: avatarPhoto,
+      avatar: generateAvatar(firstName, lastName),
     };
 
     if (password) {

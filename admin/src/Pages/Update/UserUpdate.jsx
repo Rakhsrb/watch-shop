@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Axios from "../../Axios";
 import { Section } from "../../Components/Section/Section";
@@ -18,23 +18,6 @@ export const UserUpdate = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleFileChange = async (e) => {
-    try {
-      const formImageData = new FormData();
-      const selectedFile = e.target.files[0];
-      formImageData.append("image", selectedFile);
-
-      const { data } = await Axios.post("upload", formImageData);
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        avatar: data.url,
-      }));
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -94,15 +77,13 @@ export const UserUpdate = () => {
           value={formData.newPassword}
           onChange={handleInputChange}
         />
-        <input type="file" name="avatar" onChange={handleFileChange} />
         <div className="grid grid-cols-2 py-2 gap-3">
-          <button
-            type="button"
-            className="bg-black rounded-2xl text-white py-2"
-            onClick={() => window.history.back()}
+          <Link
+            to="/"
+            className="bg-black rounded-2xl flex justify-center text-white py-2"
           >
             Cancel
-          </button>
+          </Link>
           <button
             type="submit"
             className="bg-blue-600 rounded-2xl text-white py-2"

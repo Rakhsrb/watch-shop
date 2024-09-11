@@ -14,6 +14,8 @@ import { RootLayout } from "./Layout/RootLayout";
 import { AuthLayout } from "./Layout/AuthLayout";
 import { Error } from "./Pages/Error/Error";
 import { UserUpdate } from "./Pages/Update/UserUpdate";
+import { Admins } from "./Pages/Admins/Admins";
+import { Orders } from "./Pages/Orders/Orders";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,8 +60,16 @@ function App() {
               element: <Dashboard />,
             },
             {
-              path: "/edit-admin/:id",
+              path: "edit-admin/:id",
               element: <UserUpdate />,
+            },
+            {
+              path: "admins",
+              element: <Admins />,
+            },
+            {
+              path: "orders",
+              element: <Orders />,
             },
             {
               path: "*",

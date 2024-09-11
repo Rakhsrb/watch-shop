@@ -5,10 +5,14 @@ import "./index.css";
 import { configureStore } from "@reduxjs/toolkit";
 import UserReducer from "./Toolkit/UserSlicer.jsx";
 import { Provider } from "react-redux";
+import AdminsReducer from "./Toolkit/AdminsSlicer.jsx";
+import OrdersReducer from "./Toolkit/OrdersSlicer.jsx";
 
 const store = configureStore({
   reducer: {
     user: UserReducer,
+    admins: AdminsReducer,
+    orders: OrdersReducer,
   },
 });
 
