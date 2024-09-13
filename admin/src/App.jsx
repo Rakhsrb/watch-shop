@@ -15,7 +15,8 @@ import { AuthLayout } from "./Layout/AuthLayout";
 import { Error } from "./Pages/Error/Error";
 import { UserUpdate } from "./Pages/Update/UserUpdate";
 import { Admins } from "./Pages/Admins/Admins";
-import { Orders } from "./Pages/Orders/Orders";
+import { Products } from "./modules/Products/Products";
+import { AddProduct } from "./Pages/Form/AddProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,8 +69,12 @@ function App() {
               element: <Admins />,
             },
             {
-              path: "orders",
-              element: <Orders />,
+              path: "products",
+              element: <Products />,
+            },
+            {
+              path: "create-product",
+              element: <AddProduct />,
             },
             {
               path: "*",

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const AdminsSlicer = createSlice({
-  name: "Admins",
+const ProductSlicer = createSlice({
+  name: "Product",
   initialState: {
     data: [],
     isAuth: false,
@@ -9,22 +9,22 @@ const AdminsSlicer = createSlice({
     isError: "",
   },
   reducers: {
-    getAdminsPending(state) {
+    getProductPending(state) {
       state.isPending = true;
       state.isError = "";
     },
-    getAdminsSuccess(state, { payload }) {
+    getProductSuccess(state, { payload }) {
       state.isAuth = true;
       state.data = payload;
       state.isPending = false;
     },
-    getAdminsError(state, { payload }) {
+    getProductError(state, { payload }) {
       state.isPending = false;
       state.isError = payload;
     },
   },
 });
 
-export const { getAdminsError, getAdminsPending, getAdminsSuccess } =
-  AdminsSlicer.actions;
-export default AdminsSlicer.reducer;
+export const { getProductError, getProductPending, getProductSuccess } =
+  ProductSlicer.actions;
+export default ProductSlicer.reducer;

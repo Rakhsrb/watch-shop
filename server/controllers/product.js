@@ -49,16 +49,8 @@ export const DeleteProduct = async (req, res) => {
 
 export const UpdateProduct = async (req, res) => {
   const productId = req.params.id;
-  const { title, description, price, previewPhoto, Photos } = req.body;
   try {
-    const updatedProduct = {
-      title,
-      description,
-      price,
-      previewPhoto,
-      Photos,
-    };
-    const product = await Product.findByIdAndUpdate(productId, updatedProduct, {
+    const product = await Product.findByIdAndUpdate(productId, req.body, {
       new: true,
     });
     if (!product) {

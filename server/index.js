@@ -29,9 +29,13 @@ const upload = multer({ storage });
 
 app.use("/uploads", express.static("uploads"));
 
-app.post("/upload", upload.single("image"), async (req, res) => {
-  res.json({
-    url: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
+app.post("/upload", upload.array("photos"), async (req, res) => {
+  const uploadedImages = req.files.map(
+    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
+  );
+  res.status(200).json({
+    message: "Изображения успешно загружены!",
+    photos: uploadedImages,
   });
 });
 

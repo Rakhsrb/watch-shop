@@ -16,8 +16,11 @@ export const Sidebar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to={"/orders"} className="flex text-xl text-yellow-500 p-5">
-            Orders
+          <NavLink
+            to={"/products"}
+            className="flex text-xl text-yellow-500 p-5"
+          >
+            Products
           </NavLink>
         </li>
       </ul>

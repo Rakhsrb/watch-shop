@@ -7,12 +7,14 @@ import UserReducer from "./Toolkit/UserSlicer.jsx";
 import { Provider } from "react-redux";
 import AdminsReducer from "./Toolkit/AdminsSlicer.jsx";
 import OrdersReducer from "./Toolkit/OrdersSlicer.jsx";
+import ProductsReducer from "./Toolkit/ProductsSlicer.jsx";
 
 const store = configureStore({
   reducer: {
     user: UserReducer,
     admins: AdminsReducer,
     orders: OrdersReducer,
+    products: ProductsReducer,
   },
 });
 

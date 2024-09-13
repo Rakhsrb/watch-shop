@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Section } from "../../Components/Section/Section";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOrdersError,
@@ -25,14 +24,8 @@ export const Orders = () => {
     getAllOrders();
   }, [dispatch]);
 
-  console.log(data);
-
   return (
-    <Section>
-      <div className="w-full flex justify-between items-center p-4">
-        <h1 className="text-3xl text-black">Orders</h1>
-      </div>
-
+    <div>
       {isPending ? (
         <table width={"100%"}>
           <tbody>
@@ -119,6 +112,6 @@ export const Orders = () => {
           No orders found.
         </p>
       )}
-    </Section>
+    </div>
   );
 };
