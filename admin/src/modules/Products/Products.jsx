@@ -6,7 +6,7 @@ import {
   getProductPending,
   getProductSuccess,
 } from "../../Toolkit/ProductsSlicer";
-import { Eye, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Products = () => {
@@ -114,8 +114,11 @@ export const Products = () => {
                 </td>
                 <td className="py-1 px-4 border-b border-gray-800 text-center ">
                   <div className="flex justify-center items-center gap-5">
-                    <Link to={`view/${product._id}`}>
-                      <Eye className="text-blue-600 text-xs text-center" />
+                    <Link
+                      to={`/products/edit/${product._id}`}
+                      className="bg-sky-600 text-white rounded-md p-1 hover:bg-sky-700"
+                    >
+                      <Pencil className="text-white text-xs" />
                     </Link>
                     <button
                       onClick={() => handleDelete(product._id)}

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Axios from "../../Axios";
 import {
   getAdminsError,
   getAdminsPending,
   getAdminsSuccess,
 } from "../../Toolkit/AdminsSlicer";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 export const Admins = () => {
   const dispatch = useDispatch();
@@ -125,12 +125,20 @@ export const Admins = () => {
                   {admin.phoneNumber}
                 </td>
                 <td className="py-1 px-4 border-b border-green-800 text-center">
-                  <button
-                    onClick={() => handleDelete(admin._id)}
-                    className="bg-white rounded-md p-1"
-                  >
-                    <Trash2 className="text-green-600 text-xs hover:text-green-800 cursor-pointer" />
-                  </button>
+                  <div className="flex justify-center items-center gap-5">
+                    <Link
+                      to={`/edit-admin/${admin._id}`}
+                      className="bg-sky-600 text-white rounded-md p-1 hover:bg-sky-700"
+                    >
+                      <Pencil className="text-white text-xs" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(admin._id)}
+                      className="bg-white rounded-md p-1"
+                    >
+                      <Trash2 className="text-green-600 text-xs hover:text-green-800 cursor-pointer" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

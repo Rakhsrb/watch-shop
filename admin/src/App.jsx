@@ -13,10 +13,12 @@ import { Dashboard } from "./Pages/Dashboard/Dashboard";
 import { RootLayout } from "./Layout/RootLayout";
 import { AuthLayout } from "./Layout/AuthLayout";
 import { Error } from "./Pages/Error/Error";
-import { UserUpdate } from "./Pages/Update/UserUpdate";
+import { UserUpdate } from "./Pages/AdminForms/UserUpdate";
 import { Admins } from "./Pages/Admins/Admins";
 import { Products } from "./modules/Products/Products";
 import { AddProduct } from "./Pages/Form/AddProduct";
+import { EditProduct } from "./Pages/Form/EditProduct";
+import { AddNewAdmin } from "./Pages/AdminForms/AddNewAdmin";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,16 +63,24 @@ function App() {
               element: <Dashboard />,
             },
             {
-              path: "edit-admin/:id",
-              element: <UserUpdate />,
-            },
-            {
               path: "admins",
               element: <Admins />,
             },
             {
+              path: "edit-admin/:id",
+              element: <UserUpdate />,
+            },
+            {
+              path: "create-admin",
+              element: <AddNewAdmin />,
+            },
+            {
               path: "products",
               element: <Products />,
+            },
+            {
+              path: "products/edit/:id",
+              element: <EditProduct />,
             },
             {
               path: "create-product",

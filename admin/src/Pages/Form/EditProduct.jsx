@@ -1,19 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Section } from "../../Components/Section/Section";
 import Axios from "../../Axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export const AddProduct = () => {
+export const EditProduct = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [productData, setProductData] = useState({
     title: "",
     description: "",
-    price: 0,
-    stock: 0,
+    price: "",
+    stock: "",
     category: "",
-    colors: [],
+    colors: "",
     photos: [],
   });
+
+  const [isPending, setIsPending] = useState(false);
+  const [isError, setIsError] = useState("");
+  const [imagePending, setImagePending] = useState(false);
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        setIsPending(true);
+        const { data } = (await Axios.get(`product/${id}`)).data;
+        setProductData(data);
+      } catch (error) {
+        setIsError(error.response?.data?.message || "An error occurred.");
+      } finally {
+        setIsPending(false);
+      }
+    };
+    getProduct();
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,12 +48,15 @@ export const AddProduct = () => {
       for (let i = 0; i < files.length; i++) {
         formImageData.append("photos", files[i]);
       }
+      setImagePending(true);
       const { data } = await Axios.post("/upload", formImageData);
       setProductData((prevData) => ({
         ...prevData,
-        photos: [...prevData.photos, ...data.photos],
+        photos: data.photos,
       }));
+      setImagePending(false);
     } catch (err) {
+      setImagePending(false);
       console.log(err);
     }
   };
@@ -40,7 +64,7 @@ export const AddProduct = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await Axios.post("/product/create", {
+      const response = await Axios.put(`/product/${id}`, {
         title: productData.title,
         description: productData.description,
         price: +productData.price,
@@ -51,22 +75,25 @@ export const AddProduct = () => {
       });
       navigate("/products");
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data?.message || "An error occurred.");
     }
   };
 
   return (
     <Section>
+      {isPending && <p>Loading...</p>}
+      {isError && <p className="text-red-500">{isError}</p>}
       <form
         onSubmit={handleFormSubmit}
         className="flex flex-col space-y-4 w-full mx-auto mt-14 md:w-[500px]"
       >
-        <h1 className="text-4xl text-center">New Product</h1>
+        <h1 className="text-4xl text-center">Edit Product</h1>
         <input
           type="text"
           name="title"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          value={productData.title || ""}
           placeholder="Title"
         />
         <input
@@ -74,6 +101,7 @@ export const AddProduct = () => {
           name="description"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          value={productData.description || ""}
           placeholder="Description"
         />
         <input
@@ -81,12 +109,14 @@ export const AddProduct = () => {
           name="price"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          value={productData.price || ""}
           placeholder="Price"
         />
         <input
           type="number"
           name="stock"
           className="border border-gray-300 rounded-md p-2 w-full"
+          value={productData.stock || ""}
           onChange={handleInputChange}
           placeholder="Stock"
         />
@@ -94,6 +124,7 @@ export const AddProduct = () => {
           <select
             name="category"
             className="border border-gray-300 rounded-md p-2 bg-white"
+            value={productData.category || ""}
             onChange={handleInputChange}
           >
             <option value="none">Select Category</option>
@@ -106,6 +137,7 @@ export const AddProduct = () => {
             name="colors"
             className="border border-gray-300 rounded-md p-2 bg-white"
             onChange={handleInputChange}
+            value={productData.colors || ""}
           >
             <option value="none">Select Color</option>
             <option value="red">red</option>
@@ -123,9 +155,12 @@ export const AddProduct = () => {
         />
         <button
           type="submit"
-          className="bg-green-700 w-full text-xl py-2 rounded-md text-white"
+          disabled={imagePending}
+          className={`${
+            imagePending ? "bg-green-400" : "bg-green-700"
+          } w-full text-xl py-2 rounded-md text-white`}
         >
-          Submit
+          {imagePending ? "Loading..." : "Submit"}
         </button>
       </form>
     </Section>
