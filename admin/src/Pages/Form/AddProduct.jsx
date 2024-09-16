@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 export const AddProduct = () => {
   const navigate = useNavigate();
+  const [imagePending, setImagePending] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [productData, setProductData] = useState({
     title: "",
     description: "",
@@ -27,6 +29,7 @@ export const AddProduct = () => {
       for (let i = 0; i < files.length; i++) {
         formImageData.append("photos", files[i]);
       }
+      setImagePending(true);
       const { data } = await Axios.post("/upload", formImageData);
       setProductData((prevData) => ({
         ...prevData,
@@ -34,12 +37,15 @@ export const AddProduct = () => {
       }));
     } catch (err) {
       console.log(err);
+    } finally {
+      setImagePending(false);
     }
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsPending(true);
       const response = await Axios.post("/product/create", {
         title: productData.title,
         description: productData.description,
@@ -52,6 +58,8 @@ export const AddProduct = () => {
       navigate("/products");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -67,6 +75,7 @@ export const AddProduct = () => {
           name="title"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          required
           placeholder="Title"
         />
         <input
@@ -74,6 +83,7 @@ export const AddProduct = () => {
           name="description"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          required
           placeholder="Description"
         />
         <input
@@ -81,6 +91,7 @@ export const AddProduct = () => {
           name="price"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          required
           placeholder="Price"
         />
         <input
@@ -88,6 +99,7 @@ export const AddProduct = () => {
           name="stock"
           className="border border-gray-300 rounded-md p-2 w-full"
           onChange={handleInputChange}
+          required
           placeholder="Stock"
         />
         <div className="grid grid-cols-2 gap-3 w-full">
@@ -95,6 +107,7 @@ export const AddProduct = () => {
             name="category"
             className="border border-gray-300 rounded-md p-2 bg-white"
             onChange={handleInputChange}
+            required
           >
             <option value="none">Select Category</option>
             <option value="sport">Sport</option>
@@ -106,6 +119,7 @@ export const AddProduct = () => {
             name="colors"
             className="border border-gray-300 rounded-md p-2 bg-white"
             onChange={handleInputChange}
+            required
           >
             <option value="none">Select Color</option>
             <option value="red">red</option>
@@ -119,13 +133,24 @@ export const AddProduct = () => {
           name="photos"
           onChange={handleFileChange}
           multiple
+          required
           className="border border-gray-300 rounded-md p-2 w-full"
         />
+        {imagePending && (
+          <h1 className="bg-sky-600 text-white text-center py-2">
+            Uploading image...
+          </h1>
+        )}
         <button
           type="submit"
-          className="bg-green-700 w-full text-xl py-2 rounded-md text-white"
+          disabled={imagePending || isPending}
+          className={`${
+            imagePending || isPending
+              ? "bg-green-600 cursor-not-allowed"
+              : "bg-green-700"
+          } w-full text-xl py-2 rounded-md text-white`}
         >
-          Submit
+          {imagePending || isPending ? "Loading..." : "Submit"}
         </button>
       </form>
     </Section>

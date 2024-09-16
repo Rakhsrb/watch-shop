@@ -153,11 +153,16 @@ export const EditProduct = () => {
           multiple
           className="border border-gray-300 rounded-md p-2 w-full"
         />
+        {imagePending && (
+          <h1 className="bg-sky-600 text-white text-center py-2">
+            Uploading image...
+          </h1>
+        )}
         <button
           type="submit"
           disabled={imagePending}
           className={`${
-            imagePending ? "bg-green-400" : "bg-green-700"
+            imagePending ? "bg-green-600 cursor-not-allowed" : "bg-green-700"
           } w-full text-xl py-2 rounded-md text-white`}
         >
           {imagePending ? "Loading..." : "Submit"}

@@ -41,7 +41,7 @@ export const Products = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 max-h-screen overflow-y-auto">
+    <div className="p-8 bg-green-100 max-h-screen overflow-y-auto">
       <div className="w-full flex justify-between items-center p-4">
         <h1 className="text-3xl text-black">Products</h1>
         <Link
@@ -76,7 +76,7 @@ export const Products = () => {
       ) : isError ? (
         <p className="text-red-500 text-center text-xl">Error: {isError}</p>
       ) : data.length > 0 ? (
-        <table className="min-w-full bg-white text-black shadow-lg">
+        <table className="min-w-full bg-green-800 text-black shadow-lg">
           <thead className="bg-green-800 text-white">
             <tr>
               <th className="py-3 px-6 text-left border-b border-gray-700">
@@ -93,11 +93,11 @@ export const Products = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-green-800">
             {data.map((product) => (
               <tr
                 key={product._id}
-                className="hover:bg-gray-100 transition-colors"
+                className="hover:bg-green-700 transition-colors text-white"
               >
                 <td className="py-1 px-6 border-b border-gray-800">
                   <img
