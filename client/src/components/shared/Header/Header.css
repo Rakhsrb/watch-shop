@@ -1,0 +1,29 @@
+.handleNav {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .handleNav {
+    display: block;
+  }
+  .nav-menu.active {
+    left: 0;
+  }
+  .nav-menu {
+    position: absolute;
+    left: -100%;
+    top: 80px;
+    background: white;
+    height: 30vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.623);
+    backdrop-filter: blur(10px);
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-menu li {
+    font-size: 20px;
+  }
+}
