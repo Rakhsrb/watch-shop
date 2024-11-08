@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 const token = Cookies.get("token");
 
 const instance = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: "https://watch-shop-aiwt.onrender.com/",
   headers: {
     Authorization: token,
   },
