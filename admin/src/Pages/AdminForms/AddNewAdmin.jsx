@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Axios from "../../Axios";
 import { Section } from "../../Components/Section/Section";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const AddNewAdmin = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [adminData, setAdminData] = useState({
     firstName: "",
@@ -21,6 +23,7 @@ export const AddNewAdmin = () => {
     e.preventDefault();
     try {
       const { data } = await Axios.post("/admin/create", adminData);
+      navigate("/admins");
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred");
     }

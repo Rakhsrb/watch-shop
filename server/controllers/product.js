@@ -17,16 +17,25 @@ export const CreateNewProduct = async (req, res) => {
   }
 };
 
-export const GetAllProducts = async (_, res) => {
+export const GetAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { title, category, pageNum, pageSize } = req.query;
+    const titleRegExp = new RegExp(title, "i");
+    const categoryRegExp = new RegExp(category, "i");
 
-    if (!products) {
-      return res.status(404).json({
-        message: "Product not found.",
-      });
-    }
-    return res.status(201).json({ data: products });
+    const total = await Product.countDocuments({
+      title: titleRegExp,
+      category: categoryRegExp,
+    });
+
+    const products = await Product.find({
+      title: titleRegExp,
+      category: categoryRegExp,
+    })
+      .skip((pageNum - 1) * pageSize)
+      .limit(parseInt(pageSize));
+
+    return res.status(200).json({ data: products, total });
   } catch (error) {
     return sendErrorResponse(res, 500, "Internal server error.");
   }

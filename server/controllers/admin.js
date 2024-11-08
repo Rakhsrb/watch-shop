@@ -50,7 +50,7 @@ export const CreateNewAdmin = async (req, res) => {
     });
 
     newAdmin.save();
-    
+
     return res.status(201).json({
       message: "New admin successfully created!",
       data: newAdmin,

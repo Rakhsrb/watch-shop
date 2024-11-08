@@ -18,7 +18,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Set up multer storage with hashed filenames
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
