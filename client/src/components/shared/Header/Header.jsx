@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Container } from "../Container/Container";
 import { Link } from "react-router-dom";
-import { List, ShoppingBag, ShoppingCart, X } from "@phosphor-icons/react";
+import { List, ShoppingCart, X } from "@phosphor-icons/react";
 import "./Header.css";
 
 export const Header = () => {
@@ -25,7 +25,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className="h-[80px] bg-black fixed w-full left-0 top-0">
+    <header className="h-[80px] bg-zinc-900 fixed w-full left-0 top-0">
       <Container className={"h-full flex justify-between items-center"}>
         <Link to={"/"}>
           <img
@@ -37,7 +37,7 @@ export const Header = () => {
         <div className="flex gap-8 items-center">
           <ul
             ref={navMenuRef}
-            className={`flex gap-5 font-semibold text-white nav-menu ${
+            className={`flex gap-5 font-medium text-white nav-menu ${
               navActive ? "active" : ""
             }`}
           >
